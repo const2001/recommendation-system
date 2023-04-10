@@ -1,8 +1,15 @@
 from datetime import datetime, timezone
-import pandas as pd
-from datetime import datetime
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+
+
+
+# Recommend events based on user preferences
+def recommend_events(user_id, events):
+    user_pref = user_preferences[user_id]
+    recommended_events = []
+    for event in events:
+        if event["country"] == user_pref["country"] and event["sport"] == user_pref["sport"]:
+            recommended_events.append(event)
+    return recommended_events
 
 # User data
 users = [
@@ -25,41 +32,3 @@ coupons = [
 {"coupon_id": "C003", "selections": [{"event_id": "E003", "odds": 2.5}], "stake": 20.0, "timestamp": "2022-04-08T11:30:00", "user_id": 3},
 ]
 
-
-
-# Load the data into pandas dataframes
-users_df = pd.DataFrame(users)
-events_df = pd.DataFrame(events)
-coupons_df = pd.DataFrame(coupons)
-
-# Convert the timestamp strings to datetime objects
-events_df['begin_timestamp'] = events_df['begin_timestamp'].apply(lambda x: datetime.fromisoformat(x[:-6]))
-events_df['end_timestamp'] = events_df['end_timestamp'].apply(lambda x: datetime.fromisoformat(x[:-6]))
-coupons_df['timestamp'] = coupons_df['timestamp'].apply(lambda x: datetime.fromisoformat(x))
-
-# Join the dataframes to create a single table
-data = pd.merge(coupons_df, events_df, on='event_id', how='left')
-data = pd.merge(data, users_df, on='user_id', how='left')
-
-# Group the data by user_id and create a list of events they have bet on
-user_events = data.groupby('user_id')['league'].apply(list).reset_index(name='events')
-
-# Create a CountVectorizer object to convert the events list into a matrix of word frequencies
-cv = CountVectorizer()
-event_matrix = cv.fit_transform(user_events['events'].apply(lambda x: ' '.join(x)))
-
-# Calculate the cosine similarity between event vectors
-similarity_matrix = cosine_similarity(event_matrix)
-
-# Define a function to recommend events to a user based on the similarity matrix
-def recommend_events(user_id, num_recommendations=3):
-    # Get the index of the user in the similarity matrix
-    user_index = user_events[user_events['user_id'] == user_id].index[0]
-    # Get the similarity scores between the user and all other users
-    user_similarities = similarity_matrix[user_index]
-    # Get the indices of the most similar users
-    most_similar_users = user_similarities.argsort()[::-1][1:num_recommendations+1]
-    # Get the events that the most similar users have bet on
-    recommended_events = data[data['user_id'].isin(most_similar_users)]['event_id'].unique().tolist()
-    # Return the recommended events
-    return recommended_events
