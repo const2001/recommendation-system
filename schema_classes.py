@@ -7,12 +7,12 @@ class UserSchema(Schema):
     currency = fields.String(required=True)
     gender = fields.String(required=True)
     sport_pref = fields.String(required=True)
-    registration_date = fields.DateTime(required=True, default=datetime.utcnow)
+    registration_date = fields.DateTime(required=True)
 
 class EventSchema(Schema):
     begin_timestamp = fields.DateTime(required=True)
     country = fields.String(required=True)
-    end_timestamp = fields.DateTime(required=True, default=datetime.max)
+    end_timestamp = fields.DateTime(required=True)
     event_id = fields.UUID(required=True)
     league = fields.String(required=True)
     participants = fields.List(fields.String(), required=True)

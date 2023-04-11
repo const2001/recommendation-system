@@ -1,21 +1,37 @@
 from datetime import datetime, timezone
 
+# user_preferences = {
+#     1: {"country": "Italy", "sport": "Football"},
+#     2: {"country": "Germany", "sport": "Football"},
+#     3: {"country": "Spain", "sport": "Football"}
+# }
 
+# Recommend coupons based on user preferences and odds
+def recommend_coupons(user, coupons, events):
+    
+    recommended_coupons = []
+    for coupon in coupons:
+        coupon_odds = 1
+        for selection in coupon["selections"]:
+            event_id = selection["event_id"]
+            event = next((e for e in events if e["event_id"] == event_id), None)
+            if event and event["country"] == user["country"] and event["sport"] == user["sport_pref"]:
+                coupon_odds *= selection["odds"]
+            else:
+                coupon_odds = 0
+                break
+        if coupon_odds > 0:
+            coupon_copy = coupon.copy()
+            coupon_copy["odds"] = coupon_odds
+            recommended_coupons.append(coupon_copy)
+    return sorted(recommended_coupons, key=lambda x: x["odds"], reverse=True)
 
-# Recommend events based on user preferences
-def recommend_events(user_id, events):
-    user_pref = user_preferences[user_id]
-    recommended_events = []
-    for event in events:
-        if event["country"] == user_pref["country"] and event["sport"] == user_pref["sport"]:
-            recommended_events.append(event)
-    return recommended_events
 
 # User data
 users = [
-    {"user_id": 1, "birth_year": 1990, "country": "Italy", "currency": "EUR", "registration_date": "2022-03-01T00:00:00"},
-    {"user_id": 2, "birth_year": 1985, "country": "Germany", "currency": "EUR", "registration_date": "2022-03-01T00:00:00"},
-    {"user_id": 3, "birth_year": 1995, "country": "Spain", "currency": "EUR", "registration_date": "2022-03-01T00:00:00"}
+    {"user_id": 1, "birth_year": 1990, "country": "Italy", "sport_pref": "Football" ,"currency": "EUR", "registration_date": "2022-03-01T00:00:00",},
+    {"user_id": 2, "birth_year": 1985, "country": "Germany", "sport_pref": "Football","currency": "EUR", "registration_date": "2022-03-01T00:00:00"},
+    {"user_id": 3, "birth_year": 1995, "country": "Spain", "sport_pref": "Football", "currency": "EUR", "registration_date": "2022-03-01T00:00:00"}
 ]
 
 # Event data
@@ -32,3 +48,4 @@ coupons = [
 {"coupon_id": "C003", "selections": [{"event_id": "E003", "odds": 2.5}], "stake": 20.0, "timestamp": "2022-04-08T11:30:00", "user_id": 3},
 ]
 
+#print(recommend_coupons(1, coupons, events)) # Outputs [{'coupon_id': 'C001', 'selections': [{'event_id': 'E001', 'odds': 2.0}], 'stake': 10.0, 'timestamp': '2022-04-08T09:30:00', 'user_id': 1, 'odds': 2.0}]
