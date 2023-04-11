@@ -1,10 +1,5 @@
 from datetime import datetime, timezone
 
-# user_preferences = {
-#     1: {"country": "Italy", "sport": "Football"},
-#     2: {"country": "Germany", "sport": "Football"},
-#     3: {"country": "Spain", "sport": "Football"}
-# }
 
 # Recommend coupons based on user preferences and odds
 
