@@ -190,7 +190,7 @@ def get_user_by_id(user_id):
     return None
 
 
-# Define an endpoint for adding a new user
+
 @app.route("/add_user", methods=["POST"])
 def add_user():
     # Get the request data and validate it against the schema
@@ -200,8 +200,7 @@ def add_user():
         return jsonify({"message": "Validation error", "errors": error.messages}), 400
 
     users.append(user_data)
-    # Add the user to the database or perform any other required actions
-    # ...
+    
 
     return jsonify({"message": "User added successfully", "user": user_data}), 201
 
@@ -210,11 +209,25 @@ def add_user():
 def get_users():
     return jsonify(users)
 
+@app.route("/add_event", methods=["POST"])
+def add_user():
+    # Get the request data and validate it against the schema
+    try:
+        event_data = EventSchema().load(request.json)
+    except ValidationError as error:
+        return jsonify({"message": "Validation error", "errors": error.messages}), 400
+
+    users.append(event_data)
+    # Add the user to the database or perform any other required actions
+    # ...
+
+    return jsonify({"message": "User added successfully", "user": event_data}), 201
 
 @app.route("/recommendation/<int:user_id>", methods=["GET"])
 def get_recommendation(user_id):
     if get_user_by_id(user_id):
-        rec_coupons = recommend_coupons(get_user_by_id(user_id), coupons, events)
+        rec_coupons = recommend_coupons(
+            get_user_by_id(user_id), coupons, events)
     else:
         return "No user found"
     if rec_coupons:
@@ -224,7 +237,8 @@ def get_recommendation(user_id):
             return jsonify({"recommended_coupons": result})
         except ValidationError as error:
             return (
-                jsonify({"message": "Validation error", "errors": error.messages}),
+                jsonify({"message": "Validation error",
+                        "errors": error.messages}),
                 400,
             )
 
