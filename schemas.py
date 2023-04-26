@@ -1,5 +1,5 @@
 #User Schema:
-{
+user_schema = {
     "type": "object",
     "properties": {
         "birth_year": {"type": "integer"},
@@ -13,7 +13,7 @@
 }
 
 #Event Schema:
-{
+event_schema={
     "type": "object",
     "properties": {
         "begin_timestamp": {"type": "string", "format": "date-time"},
@@ -28,7 +28,7 @@
 }
 
 #Coupon Schema:
-{
+coupon_schema={
     "type": "object",
     "properties": {
         "coupon_id": {"type": "string"},

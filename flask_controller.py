@@ -209,19 +209,19 @@ def add_user():
 def get_users():
     return jsonify(users)
 
-@app.route("/add_event", methods=["POST"])
-def add_user():
-    # Get the request data and validate it against the schema
-    try:
-        event_data = EventSchema().load(request.json)
-    except ValidationError as error:
-        return jsonify({"message": "Validation error", "errors": error.messages}), 400
+# @app.route("/add_event", methods=["POST"])
+# def add_user():
+#     # Get the request data and validate it against the schema
+#     try:
+#         event_data = EventSchema().load(request.json)
+#     except ValidationError as error:
+#         return jsonify({"message": "Validation error", "errors": error.messages}), 400
 
-    users.append(event_data)
-    # Add the user to the database or perform any other required actions
-    # ...
+#     users.append(event_data)
+#     # Add the user to the database or perform any other required actions
+#     # ...
 
-    return jsonify({"message": "User added successfully", "user": event_data}), 201
+#     return jsonify({"message": "User added successfully", "user": event_data}), 201
 
 @app.route("/recommendation/<int:user_id>", methods=["GET"])
 def get_recommendation(user_id):
