@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from validators import validate_user,validate_coupon,validate_event
+from validators import validate_user, validate_coupon, validate_event
 from recommendation_gen import recommend_coupons
 
 
@@ -190,58 +190,105 @@ def get_user_by_id(user_id):
     return None
 
 
-
 @app.route("/add_user", methods=["POST"])
 def add_user():
     # Get the request data and validate it against the schema
     user_data = request.json
-    user_data["user_id"] =len(users)+1
-    IsValid,Validation_result = validate_user(user_data)
-    if(IsValid):
+    user_data["user_id"] = len(users) + 1
+    IsValid, Validation_result = validate_user(user_data)
+    if IsValid:
         users.append(user_data)
-        return jsonify({"message": "User added successfully", "user": user_data,"Result": Validation_result}), 201
-      
+        return (
+            jsonify(
+                {
+                    "message": "User added successfully",
+                    "user": user_data,
+                    "Result": Validation_result,
+                }
+            ),
+            201,
+        )
+
     return jsonify({"message": "Validation error", "Result": Validation_result}), 400
+
 
 @app.route("/users", methods=["GET"])
 def get_users():
     return jsonify(users)
 
-# @app.route("/add_event", methods=["POST"])
-# def add_user():
-#     # Get the request data and validate it against the schema
-#     try:
-#         event_data = EventSchema().load(request.json)
-#     except ValidationError as error:
-#         return jsonify({"message": "Validation error", "errors": error.messages}), 400
 
-#     users.append(event_data)
-#     # Add the user to the database or perform any other required actions
-#     # ...
+@app.route("/users", methods=["GET"])
+def get_users():
+    return jsonify(users)
 
-#     return jsonify({"message": "User added successfully", "user": event_data}), 201
+
+def add_event():
+    # Get the request data and validate it against the schema
+    event_data = request.json
+    IsValid, Validation_result = validate_event(event_data)
+    if IsValid:
+        users.append(event_data)
+        return (
+            jsonify(
+                {
+                    "message": "Event added successfully",
+                    "user": event_data,
+                    "Result": Validation_result,
+                }
+            ),
+            201,
+        )
+
+    return jsonify({"message": "Validation error", "Result": Validation_result}), 400
+
+
+def add_coupon():
+    # Get the request data and validate it against the schema
+    coupon_data = request.json
+    IsValid, Validation_result = validate_coupon(coupon_data)
+    if IsValid:
+        users.append(coupon_data)
+        return (
+            jsonify(
+                {
+                    "message": "Coupon added successfully",
+                    "user": coupon_data,
+                    "Result": Validation_result,
+                }
+            ),
+            201,
+        )
+
+    return jsonify({"message": "Validation error", "Result": Validation_result}), 400
+
 
 @app.route("/recommendation/", methods=["GET"])
 def get_recommendation(user_id):
     user_id = request.args.get("user_id")
     if not user_id:
-        return "No user ID provided",400
+        return "No user ID provided", 400
     if get_user_by_id(user_id):
-        rec_coupons = recommend_coupons(
-            get_user_by_id(user_id), coupons, events)
+        rec_coupons = recommend_coupons(get_user_by_id(user_id), coupons, events)
     else:
         return "No user found"
     if rec_coupons:
-        try:
-            schema = CouponSchema(many=True)
-            result = schema.loads(rec_coupons)
-            return jsonify({"recommended_coupons": result})
-        except ValidationError as error:
-            return (
-                jsonify({"message": "Validation error",
-                        "errors": error.messages}),
-                400,
-            )
+        for rec_coupon in rec_coupons:
+            IsValid, validationResult = validate_coupon(rec_coupon)
+            if not IsValid:
+                return (
+                    jsonify({"message": "Validation error", "error": validationResult}),
+                    400,
+                )
+        return jsonify({"recommended_coupons": rec_coupons})
+        # try:
+        #     schema = CouponSchema(many=True)
+        #     result = schema.loads(rec_coupons)
+        #     return jsonify({"recommended_coupons": result})
+        # except ValidationError as error:
+        #     return (
+        #         jsonify({"message": "Validation error", "errors": error.messages}),
+        #         400,
+        #     )
 
     else:
         return "no coupons reccomended"
