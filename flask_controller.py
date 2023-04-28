@@ -10,6 +10,7 @@ users = [
     {
         "user_id": 1,
         "birth_year": 1990,
+        "gender": "Male",
         "country": "Italy",
         "sport_pref": "Football",
         "currency": "EUR",
@@ -18,6 +19,7 @@ users = [
     {
         "user_id": 2,
         "birth_year": 1985,
+        "gender": "Male",
         "country": "Germany",
         "sport_pref": "Football",
         "currency": "EUR",
@@ -26,6 +28,7 @@ users = [
     {
         "user_id": 3,
         "birth_year": 1995,
+        "gender": "Male",
         "country": "Spain",
         "sport_pref": "Football",
         "currency": "EUR",
@@ -34,6 +37,7 @@ users = [
     {
         "user_id": 4,
         "birth_year": 2000,
+        "gender": "Male",
         "country": "France",
         "sport_pref": "Basketball",
         "currency": "EUR",
@@ -42,6 +46,7 @@ users = [
     {
         "user_id": 5,
         "birth_year": 1998,
+        "gender": "Male",
         "country": "USA",
         "sport_pref": "American Football",
         "currency": "USD",
@@ -50,6 +55,7 @@ users = [
     {
         "user_id": 6,
         "birth_year": 1989,
+        "gender": "Male",
         "country": "Brazil",
         "sport_pref": "Soccer",
         "currency": "BRL",
