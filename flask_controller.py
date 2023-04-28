@@ -219,11 +219,6 @@ def get_users():
     return jsonify(users)
 
 
-
-
-
-
-
 def add_event():
     # Get the request data and validate it against the schema
     event_data = request.json
@@ -248,6 +243,7 @@ def add_event():
 def get_users():
     return jsonify(events)
 
+
 def add_coupon():
     # Get the request data and validate it against the schema
     coupon_data = request.json
@@ -267,9 +263,11 @@ def add_coupon():
 
     return jsonify({"message": "Validation error", "Result": Validation_result}), 400
 
+
 @app.route("/coupons", methods=["GET"])
 def get_users():
     return jsonify(coupons)
+
 
 @app.route("/recommendation/", methods=["GET"])
 def get_recommendation(user_id):
