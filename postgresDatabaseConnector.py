@@ -12,6 +12,7 @@ cur = conn.cursor()
 cur.execute("SELECT * FROM pg_settings WHERE name = 'port';")
 rows = cur.fetchall()
 
+
 # Print the results
 for row in rows:
     print(row)
