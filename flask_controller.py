@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from validators import validate_user, validate_coupon, validate_event
 from recommendation_gen import recommend_coupons
+from DatabaseManager import addUserToDatabase
 
 
 app = Flask(__name__)
@@ -198,6 +199,7 @@ def add_user():
     IsValid, Validation_result = validate_user(user_data)
     if IsValid:
         users.append(user_data)
+        addUserToDatabase(user_data)
         return (
             jsonify(
                 {
@@ -217,9 +219,9 @@ def get_users():
     return jsonify(users)
 
 
-@app.route("/users", methods=["GET"])
-def get_users():
-    return jsonify(users)
+
+
+
 
 
 def add_event():
@@ -242,6 +244,10 @@ def add_event():
     return jsonify({"message": "Validation error", "Result": Validation_result}), 400
 
 
+@app.route("/events", methods=["GET"])
+def get_users():
+    return jsonify(events)
+
 def add_coupon():
     # Get the request data and validate it against the schema
     coupon_data = request.json
@@ -261,6 +267,9 @@ def add_coupon():
 
     return jsonify({"message": "Validation error", "Result": Validation_result}), 400
 
+@app.route("/coupons", methods=["GET"])
+def get_users():
+    return jsonify(coupons)
 
 @app.route("/recommendation/", methods=["GET"])
 def get_recommendation(user_id):
