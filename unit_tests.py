@@ -1,5 +1,31 @@
 import unittest
 from recommendation_gen import recommend_coupons 
+from validators import validate_user,validate_event,validate_coupon
+
+
+class TestUserValidator(unittest.TestCase):
+    
+    def test_valid_user(self):
+        user = {
+            "name": "John Doe",
+            "email": "johndoe@example.com",
+            "age": 30
+        }
+        result = validate_user(user)
+        self.assertEqual(result, "The JSON data is valid.")
+    
+    def test_invalid_user(self):
+        user = {
+            "name": "Jane Doe",
+            "email": "janedoe.example.com",
+            "age": "30"
+        }
+        result = validate_user(user)
+        self.assertIn("The JSON data is not valid.", result)
+
+
+
+
 
 class TestRecommendCoupons(unittest.TestCase):
 

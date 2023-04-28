@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from schema_classes import UserSchema, CouponSchema, EventSchema, ValidationError
+from validators import validate_user,validate_coupon,validate_event
 from recommendation_gen import recommend_coupons
 
 
@@ -194,16 +194,14 @@ def get_user_by_id(user_id):
 @app.route("/add_user", methods=["POST"])
 def add_user():
     # Get the request data and validate it against the schema
-    try:
-        user_data = UserSchema().load(request.json)
-    except ValidationError as error:
-        return jsonify({"message": "Validation error", "errors": error.messages}), 400
-
-    users.append(user_data)
-    
-
-    return jsonify({"message": "User added successfully", "user": user_data}), 201
-
+    user_data = request.json
+    user_data["user_id"] =len(users)+1
+    IsValid,Validation_result = validate_user(user_data)
+    if(IsValid):
+        users.append(user_data)
+        return jsonify({"message": "User added successfully", "user": user_data,"Result": Validation_result}), 201
+      
+    return jsonify({"message": "Validation error", "Result": Validation_result}), 400
 
 @app.route("/users", methods=["GET"])
 def get_users():
@@ -223,8 +221,11 @@ def get_users():
 
 #     return jsonify({"message": "User added successfully", "user": event_data}), 201
 
-@app.route("/recommendation/<int:user_id>", methods=["GET"])
+@app.route("/recommendation/", methods=["GET"])
 def get_recommendation(user_id):
+    user_id = request.args.get("user_id")
+    if not user_id:
+        return "No user ID provided",400
     if get_user_by_id(user_id):
         rec_coupons = recommend_coupons(
             get_user_by_id(user_id), coupons, events)

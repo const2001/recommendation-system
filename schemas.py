@@ -7,7 +7,7 @@ user_schema = {
         "currency": {"type": "string"},
         "registration_date": {"type": "string", "format": "date-time"},
         "user_id": {"type": "integer"},
-        "sport_pref": {"type": "integer"}
+        "sport_pref": {"type": "string"}
     },
     "required": ["birth_year", "country", "currency", "registration_date", "user_id","sport_pref"]
 }
