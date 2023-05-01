@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from validators import validate_user, validate_coupon, validate_event
 from recommendation_gen import recommend_coupons
 from DatabaseManager import addUserToDatabase
+from server_address import server_host,server_port
 
 
 app = Flask(__name__)
@@ -308,4 +309,4 @@ def get_recommendation(user_id):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000,debug=True)
+    app.run(host=server_host,port=server_port,debug=True)
