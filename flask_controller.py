@@ -246,7 +246,7 @@ def add_event():
 
 
 @app.route("/events", methods=["GET"])
-def get_users():
+def get_events():
     return jsonify(events)
 
 
@@ -271,7 +271,7 @@ def add_coupon():
 
 
 @app.route("/coupons", methods=["GET"])
-def get_users():
+def get_coupons():
     return jsonify(coupons)
 
 
