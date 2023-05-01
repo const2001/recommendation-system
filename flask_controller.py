@@ -197,6 +197,9 @@ def get_user_by_id(user_id):
             return user
     return None
 
+@app.route("/", methods=["GET"])
+def get_info():
+    return "Recommendation system server is up and running"
 
 @app.route("/add_user", methods=["POST"])
 def add_user():

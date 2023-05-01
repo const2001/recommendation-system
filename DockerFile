@@ -12,8 +12,8 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 
-# unblock port 80 for the Flask app to run on
-EXPOSE 3000
+# unblock port 8000 for the Flask app to run on
+EXPOSE 8000
 
 # execute the Flask app
 CMD ["python", "flask_controller.py"]
