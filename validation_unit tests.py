@@ -55,7 +55,7 @@ class TestEventValidator(unittest.TestCase):
             "begin_timestamp": "2020-02-08 18:00:00+00",
             "country": "Czech Republic",
             "end_timestamp": "2099-01-01 00:00:00+00",
-            "event_id": "2ff91a42-09b3-41a2-a8c4-4a78ba85f4cf",
+            "event_id": 1,
             "league": "Extraliga",
             "participants": ["HC Zubri", "HBC Ronal Jicin"],
             "sport": "handball",
@@ -69,7 +69,7 @@ class TestEventValidator(unittest.TestCase):
             "begin_timestamp": "2020-02-08 18:00:00+00",
             "country": "Czech Republic",
             "end_timestamp": 4083072000,
-            "event_id": "2ff91a42-09b3-41a2-a8c4-4a78ba85f4cf",
+            "event_id": 2,
             "league": "Extraliga",
             "participants": ["HC Zubri", "HBC Ronal Jicin"],
             "sport": "handball",
@@ -85,7 +85,7 @@ class TestEventValidator(unittest.TestCase):
         event = {
             "begin_timestamp": "2020-02-08 18:00:00+00",
             "end_timestamp": "2099-01-01 00:00:00+00",
-            "event_id": "2ff91a42-09b3-41a2-a8c4-4a78ba85f4cf",
+            "event_id": 1,
             "league": "Extraliga",
             "participants": ["HC Zubri", "HBC Ronal Jicin"],
             "sport": "handball",
@@ -101,8 +101,8 @@ class TestEventValidator(unittest.TestCase):
 class TestCouponValidator(unittest.TestCase):
     def test_valid_coupon(self):
         coupon = {
-            "coupon_id": "C001",
-            "selections": [{"event_id": "E001", "odds": 2.0}],
+            "coupon_id": 1,
+            "selections": [{"event_id": 1, "odds": 2.0}],
             "stake": 10.0,
             "timestamp": "2022-04-08T09:30:00",
             "user_id": 1,
@@ -113,8 +113,8 @@ class TestCouponValidator(unittest.TestCase):
 
     def test_invalid_coupon_with_incorrect_type(self):
         coupon = {
-            "coupon_id": "C001",
-            "selections": [{"event_id": "E001", "odds": "2.0"}],
+            "coupon_id": 1,
+            "selections": [{"event_id": 1, "odds": "2.0"}],
             "stake": 10.0,
             "timestamp": "2022-04-08T09:30:00",
             "user_id": 1,
@@ -128,7 +128,7 @@ class TestCouponValidator(unittest.TestCase):
 
     def test_invalid_coupon_with_missing_coupon_id(self):
         coupon = {
-            "selections": [{"event_id": "E001", "odds": 2.0}],
+            "selections": [{"event_id": 1, "odds": 2.0}],
             "stake": 10.0,
             "timestamp": "2022-04-08T09:30:00",
             "user_id": 1,
@@ -143,7 +143,7 @@ class TestCouponValidator(unittest.TestCase):
     def test_invalid_coupon_with_missing_user_id(self):
         coupon = {
             "coupon_id": "C001",
-            "selections": [{"event_id": "E001", "odds": 2.0}],
+            "selections": [{"event_id": 1, "odds": 2.0}],
             "stake": 10.0,
             "timestamp": "2022-04-08T09:30:00",
         }
@@ -167,7 +167,7 @@ class TestRecommendCoupons(unittest.TestCase):
         }
         events = [
             {
-                "event_id": "E001",
+                "event_id": 1,
                 "league": "Premier League",
                 "sport": "Football",
                 "country": "England",
@@ -176,7 +176,7 @@ class TestRecommendCoupons(unittest.TestCase):
                 "participants": ["Liverpool", "Chelsea"],
             },
             {
-                "event_id": "E002",
+                "event_id": 2,
                 "league": "La Liga",
                 "sport": "Football",
                 "country": "Spain",
@@ -185,7 +185,7 @@ class TestRecommendCoupons(unittest.TestCase):
                 "participants": ["Real Madrid", "Barcelona"],
             },
             {
-                "event_id": "E003",
+                "event_id": 3,
                 "league": "Serie A",
                 "sport": "Football",
                 "country": "Italy",
@@ -196,41 +196,32 @@ class TestRecommendCoupons(unittest.TestCase):
         ]
         coupons = [
             {
-                "coupon_id": "C001",
-                "selections": [{"event_id": "E001", "odds": 2.0}],
+                "coupon_id": 1,
+                "selections": [{"event_id": 1, "odds": 2.0}],
                 "stake": 10.0,
                 "timestamp": "2022-04-08T09:30:00",
                 "user_id": 1,
             },
             {
-                "coupon_id": "C002",
+                "coupon_id": 2,
                 "selections": [
-                    {"event_id": "E002", "odds": 1.5},
-                    {"event_id": "E003", "odds": 2.0},
+                    {"event_id": 2, "odds": 1.5},
+                    {"event_id": 3, "odds": 2.0},
                 ],
                 "stake": 5.0,
                 "timestamp": "2022-04-08T10:30:00",
                 "user_id": 2,
             },
             {
-                "coupon_id": "C003",
-                "selections": [{"event_id": "E003", "odds": 2.5}],
+                "coupon_id": 3,
+                "selections": [{"event_id": 3, "odds": 2.5}],
                 "stake": 20.0,
                 "timestamp": "2022-04-08T11:30:00",
                 "user_id": 3,
             },
         ]
-        result = recommend_coupons(user, coupons, events)
-        expected_result = [
-            {
-                "coupon_id": "C003",
-                "selections": [{"event_id": "E003", "odds": 2.5}],
-                "stake": 20.0,
-                "timestamp": "2022-04-08T11:30:00",
-                "user_id": 3,
-                "odds": 2.5,
-            }
-        ]
+        result = recommend_coupons(user, events, coupons)
+        expected_result = [{'coupon_id': 3, 'selections': [{'event_id': 3, 'odds': 2.5}], 'stake': 20.0, 'timestamp': '2022-04-08T11:30:00', 'user_id': 3}, {'coupon_id': 1, 'selections': [{'event_id': 1, 'odds': 2.0}], 'stake': 10.0, 'timestamp': '2022-04-08T09:30:00', 'user_id': 1}, {'coupon_id': 2, 'selections': [{'event_id': 2, 'odds': 1.5}, {'event_id': 3, 'odds': 2.0}], 'stake': 5.0, 'timestamp': '2022-04-08T10:30:00', 'user_id': 2}]
         self.assertEqual(result, expected_result)
 
 

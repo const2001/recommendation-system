@@ -19,7 +19,7 @@ event_schema={
         "begin_timestamp": {"type": "string", "format": "date-time"},
         "country": {"type": "string"},
         "end_timestamp": {"type": "string", "format": "date-time"},
-        "event_id": {"type": "string"},
+        "event_id": {"type": "integer"},
         "league": {"type": "string"},
         "participants": {"type": "array", "items": {"type": "string"}},
         "sport": {"type": "string"}
@@ -31,13 +31,13 @@ event_schema={
 coupon_schema={
     "type": "object",
     "properties": {
-        "coupon_id": {"type": "string"},
+        "coupon_id": {"type": "integer"},
         "selections": {
             "type": "array",
             "items": {
                 "type": "object",
                 "properties": {
-                    "event_id": {"type": "string"},
+                    "event_id": {"type": "integer"},
                     "odds": {"type": "number"}
                 },
                 "required": ["event_id", "odds"]
