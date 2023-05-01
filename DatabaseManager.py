@@ -46,6 +46,44 @@ def addUserToDatabase(user_data):
     conn.close()
 
 
+def addEventToDatabase(event_data):
+    sql = """
+    INSERT INTO events (event_id, begin_timestamp, country, end_timestamp, league, participants, sport)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
+"""
+    conn = connectPostgressDatabase()
+    curr = getDbCursor(conn)
+    curr.execute(
+        sql,
+        (
+            event_data["event_id"],
+            event_data["begin_timestamp"],
+            event_data["country"],
+            event_data["end_timestamp"],
+            event_data["league"],
+            event_data["participants"],
+            event_data["sport"],
+        ),
+    )
+    conn.commit()
+    curr.close()
+    conn.close()
+
+
+def addCouponToDatabase(coupon_data):
+    sql = """
+    INSERT INTO coupons (coupon_id, selections, stake, timestamp, user_id)
+    VALUES (%s, %s, %s, %s, %s)
+    """
+    conn = connectPostgressDatabase()
+    curr = getDbCursor(conn)
+    curr.execute(sql, (coupon_data['coupon_id'], coupon_data['selections'], coupon_data['stake'], coupon_data['timestamp'], coupon_data['user_id']))
+
+    conn.commit()
+    curr.close()
+    conn.close()
+
+
 # Test database
 
 if __name__ == "__main__":
