@@ -171,6 +171,8 @@ def getCouponsFromDatabase():
     curr.close()
     conn.close()
     return coupons
+
+
 # Test database
 
 if __name__ == "__main__":

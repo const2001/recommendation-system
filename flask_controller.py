@@ -10,65 +10,9 @@ app = Flask(__name__)
 users = getUsersFromDatabase()
 
 events = getEventsFromDatabase()
-# Coupon data
+
 coupons = getCouponsFromDatabase()
-# coupons = [
-#     {
-#         "coupon_id" : 1,
-#         "selections": [{"event_id": 1, "odds": 2.0}],
-#         "stake": 10.0,
-#         "timestamp": "2022-04-08T09:30:00",
-#         "user_id": 1,
-#     },
-#     {
-#         "coupon_id" : 2,
-#         "selections": [
-#             {"event_id": 2, "odds": 1.5},
-#             {"event_id": 3, "odds": 2.0},
-#         ],
-#         "stake": 5.0,
-#         "timestamp": "2022-04-08T10:30:00",
-#         "user_id": 2,
-#     },
-#     {
-#         "coupon_id" : 3,
-#         "selections": [{"event_id": 3, "odds": 2.5}],
-#         "stake": 20.0,
-#         "timestamp": "2022-04-08T11:30:00",
-#         "user_id": 3,
-#     },
-#     {
-#         "coupon_id" : 4,
-#         "selections": [{"event_id": 3, "odds": 2.5}],
-#         "stake": 20.0,
-#         "timestamp": "2022-04-08T11:30:00",
-#         "user_id": 3,
-#     },
-#     {
-#         "coupon_id" : 5,
-#         "selections": [{"event_id": 4, "odds": 1.8}],
-#         "stake": 15.0,
-#         "timestamp": "2022-04-13T09:30:00",
-#         "user_id": 4,
-#     },
-#     {
-#         "coupon_id" : 6,
-#         "selections": [
-#             {"event_id": 5, "odds": 1.5},
-#             {"event_id": 6, "odds": 1.7},
-#         ],
-#         "stake": 10.0,
-#         "timestamp": "2022-04-13T10:30:00",
-#         "user_id": 5,
-#     },
-#     {
-#         "coupon_id" : 7,
-#         "selections": [{"event_id": 6, "odds": 2.3}],
-#         "stake": 25.0,
-#         "timestamp": "2022-04-13T11:30:00",
-#         "user_id": 6,
-#     },
-# ]
+
 
 
 
