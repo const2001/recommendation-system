@@ -1,7 +1,5 @@
 def server_host():
-    host ="0.0.0.0"
-    return host
+    return "0.0.0.0"
 
-def server_port():
-    port=8000   
-    return port
+def server_port():  
+    return 8000

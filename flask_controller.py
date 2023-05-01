@@ -309,4 +309,5 @@ def get_recommendation(user_id):
 
 
 if __name__ == "__main__":
-    app.run(host=server_host,port=server_port,debug=True)
+    
+    app.run(host=server_host(),port=server_port(),debug=True)
