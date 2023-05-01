@@ -175,6 +175,7 @@ def getCouponsFromDatabase():
 
 # Test database
 
+
 if __name__ == "__main__":
     coupons = getCouponsFromDatabase()
     print(coupons)
