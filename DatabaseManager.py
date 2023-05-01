@@ -50,7 +50,7 @@ def addUserToDatabase(user_data):
 
 if __name__ == "__main__":
     user_data = {
-        "birth_year": 1990,
+        "birth_year": 1991,
         "gender": "Male",
         "country": "Italy",
         "sport_pref": "Football",
