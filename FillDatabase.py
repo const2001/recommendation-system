@@ -183,6 +183,14 @@ coupons = [
         "user_id": 6,
     },
 ]
+def getDummyUsers():
+    return users
+
+def getDummyEvents():
+    return events
+
+def getDummyCoupons():
+    return coupons
 
 for user in users:
     addUserToDatabase(user)

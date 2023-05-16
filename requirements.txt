@@ -1,3 +1,4 @@
 Flask
 jsonschema
 psycopg2-binary
+kafka-python==2.0.2
