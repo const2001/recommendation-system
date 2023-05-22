@@ -2,6 +2,7 @@ import psycopg2
 import json
 
 
+
 def connectPostgressDatabase():
     conn = psycopg2.connect(
         dbname="tuzrhmmv",
@@ -11,6 +12,19 @@ def connectPostgressDatabase():
         port="5432",
     )
     return conn
+
+class DatabaseConnection:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            # Initialize the database connection here
+            cls._instance.connection = connectPostgressDatabase()
+        return cls._instance
+
+    def get_connection(self):
+        return self.connection
 
 
 def getDbCursor(conn):
@@ -24,12 +38,12 @@ def getDbHostPort(cursor):
     return rows
 
 
-def addUserToDatabase(user_data):
+def addUserToDatabase(user_data,connector = connectPostgressDatabase()):
     sql = """
     INSERT INTO users (birth_year, country, currency, gender, sport_pref, registration_date)
     VALUES (%s, %s, %s, %s, %s, %s)
     """
-    conn = connectPostgressDatabase()
+    conn = connector
     curr = getDbCursor(conn)
     curr.execute(
         sql,
@@ -47,12 +61,12 @@ def addUserToDatabase(user_data):
     conn.close()
 
 
-def addEventToDatabase(event_data):
+def addEventToDatabase(event_data,connector = connectPostgressDatabase()):
     sql = """
     INSERT INTO events (begin_timestamp, country, end_timestamp, league, participants, sport)
     VALUES (%s, %s, %s, %s, %s, %s)
 """
-    conn = connectPostgressDatabase()
+    conn = connector
     curr = getDbCursor(conn)
     curr.execute(
         sql,
@@ -71,13 +85,13 @@ def addEventToDatabase(event_data):
     conn.close()
 
 
-def addCouponToDatabase(coupon_data):
+def addCouponToDatabase(coupon_data,connector = connectPostgressDatabase()):
     sql = """
     INSERT INTO coupons ( selections, stake, timestamp, user_id)
     VALUES (%s, %s, %s, %s)
     """
     coupon_selections = json.dumps(coupon_data['selections'])
-    conn = connectPostgressDatabase()
+    conn = connector
     curr = getDbCursor(conn)
     curr.execute(sql, (coupon_selections, coupon_data['stake'], coupon_data['timestamp'], coupon_data['user_id']))
 
@@ -85,14 +99,14 @@ def addCouponToDatabase(coupon_data):
     curr.close()
     conn.close()
 
-def getUsersFromDatabase():
+def getUsersFromDatabase(connector = connectPostgressDatabase()):
     sql = """
     SELECT user_id, birth_year, gender, country, sport_pref, currency, registration_date
     FROM users
     ORDER BY user_id
     """
 
-    conn = connectPostgressDatabase()
+    conn = connector
     curr = getDbCursor(conn)
     curr.execute(sql)
 
@@ -115,13 +129,13 @@ def getUsersFromDatabase():
     conn.close()
     return users
 
-def getEventsFromDatabase():
+def getEventsFromDatabase(connector = connectPostgressDatabase()):
     sql = """
     SELECT * FROM events
     ORDER BY event_id
     """
 
-    conn = connectPostgressDatabase()
+    conn = connector
     curr = getDbCursor(conn)
     curr.execute(sql)
 
@@ -144,13 +158,13 @@ def getEventsFromDatabase():
     conn.close()    
     return events    
 
-def getCouponsFromDatabase():
+def getCouponsFromDatabase(connector = connectPostgressDatabase()):
     sql = """
     SELECT * FROM coupons
     ORDER BY coupon_id
     """
 
-    conn = connectPostgressDatabase()
+    conn = connector
     curr = getDbCursor(conn)
     curr.execute(sql)
 
