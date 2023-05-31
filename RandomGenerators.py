@@ -1,7 +1,6 @@
 import random
 from datetime import timedelta,datetime
 
-
 def generate_users(n):
     users = []
     for i in range(n):
@@ -52,7 +51,39 @@ def generate_events(n):
             "participants": participants
         }
         events.append(event)
-
     return events
+
+
+
+def generate_coupon(n):
+    coupons = []
+    for i in range(n):  
+        coupon_id = random.randint(1, 100)
+        selections = []
+        timestamp = datetime.now().isoformat()
+
+        stake = round(random.uniform(5.0, 50.0), 2)
+        user_id = random.randint(1, 100)
+
+        num_selections = random.randint(1, 5)
+        for _ in range(num_selections):
+            event_id = random.randint(1, 10)
+            odds = round(random.uniform(1.0, 3.0), 2)
+            selection = {"event_id": event_id, "odds": odds}
+            selections.append(selection)
+
+        coupon = {
+            "coupon_id": coupon_id,
+            "selections": selections,
+            "stake": stake,
+            "timestamp": timestamp,
+            "user_id": user_id
+        }
+        coupons.append(coupon)
+
+    return coupons
+
+
+
 
     

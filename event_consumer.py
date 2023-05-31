@@ -1,5 +1,4 @@
 import json
-import threading
 from kafka import KafkaConsumer
 from DatabaseManager import addEventToDatabase,getDbCursor,connectPostgressDatabase,DatabaseConnection
 
