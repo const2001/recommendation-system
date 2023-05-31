@@ -30,27 +30,7 @@ def recommend_coupons(user, events, coupons):
 
 
 
-def generate_coupon(user_id, stake):
-    coupon_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    selections = []
-    timestamp = datetime.now().isoformat()
 
-    num_selections = random.randint(1, 5)
-    for _ in range(num_selections):
-        event_id = random.randint(1, 10)
-        odds = round(random.uniform(1.0, 3.0), 2)
-        selection = {"event_id": event_id, "odds": odds}
-        selections.append(selection)
-
-    coupon = {
-        "coupon_id": coupon_id,
-        "selections": selections,
-        "stake": stake,
-        "timestamp": timestamp,
-        "user_id": user_id
-    }
-
-    return coupon
 
 
 
