@@ -1,26 +1,21 @@
 from flask import Flask, request, jsonify
 from validators import validate_user, validate_coupon, validate_event
 from recommendation_gen import recommend_coupons
-from DatabaseManager import addUserToDatabase,addEventToDatabase,addCouponToDatabase,getUsersFromDatabase,getCouponsFromDatabase,getEventsFromDatabase
+from DatabaseManager import addUserToDatabase,addEventToDatabase,addCouponToDatabase,getUsersFromDatabase,getCouponsFromDatabase,getEventsFromDatabase,DatabaseConnection
 from server_address import server_host,server_port
 
 
 app = Flask(__name__)
 
-users = getUsersFromDatabase()
-
-events = getEventsFromDatabase()
-
-coupons = getCouponsFromDatabase()
-
-
-
 
 
 def get_user_by_id(user_id):
+    conn = DatabaseConnection().get_connection()
+    users = getUsersFromDatabase(conn)
+    conn.close()
     for user in users:
         if user["user_id"] == user_id:
-            return user
+            return user  
     return None
 
 @app.route("/", methods=["GET"])
@@ -30,6 +25,9 @@ def get_info():
 @app.route("/add_user", methods=["POST"])
 def add_user():
     # Get the request data and validate it against the schema
+    conn = DatabaseConnection().get_connection()
+    users = getUsersFromDatabase(conn)
+    conn.close()
     user_data = request.json
     user_data["user_id"] = len(users) + 1
     IsValid, Validation_result = validate_user(user_data)
@@ -52,13 +50,18 @@ def add_user():
 
 @app.route("/users", methods=["GET"])
 def get_users():
-    return jsonify(getUsersFromDatabase())
+    conn = DatabaseConnection().get_connection()
+    users = getUsersFromDatabase(conn)
+    conn.close()
+    return jsonify(users)
 
 
 def add_event():
     # Get the request data and validate it against the schema
     event_data = request.json
     IsValid, Validation_result = validate_event(event_data)
+    conn = DatabaseConnection().get_connection()
+    events = getEventsFromDatabase(conn)
     if IsValid:
         events.append(event_data)
         addEventToDatabase(event_data)
@@ -72,6 +75,7 @@ def add_event():
             ),
             201,
         )
+    conn.close()
 
     return jsonify({"message": "Validation error", "Result": Validation_result}), 400
 
