@@ -52,7 +52,7 @@ def add_user():
 
 @app.route("/users", methods=["GET"])
 def get_users():
-    return jsonify(users)
+    return jsonify(getUsersFromDatabase())
 
 
 def add_event():
@@ -79,7 +79,7 @@ def add_event():
 @app.route("/events", methods=["GET"])
 def get_events():
     
-    return jsonify(events)
+    return jsonify(getEventsFromDatabase())
 
 
 def add_coupon():
@@ -105,7 +105,7 @@ def add_coupon():
 
 @app.route("/coupons", methods=["GET"])
 def get_coupons():
-    return jsonify(coupons)
+    return jsonify(getCouponsFromDatabase())
 
 
 @app.route("/recommendation", methods=["GET"])

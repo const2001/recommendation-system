@@ -58,7 +58,7 @@ def addUserToDatabase(user_data,connector = connectPostgressDatabase()):
     )
     conn.commit()
     curr.close()
-    conn.close()
+    
 
 
 def addEventToDatabase(event_data,connector = connectPostgressDatabase()):
