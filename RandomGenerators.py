@@ -55,7 +55,7 @@ def generate_events(n):
 
 
 
-def generate_coupon(n):
+def generate_coupons(n):
     coupons = []
     for i in range(n):  
         coupon_id = random.randint(1, 100)

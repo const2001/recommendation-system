@@ -1,6 +1,6 @@
 import json
 from kafka import KafkaProducer
-from RandomGenerators import generate_users,generate_events
+from RandomGenerators import generate_events
 
 
 # Messages will be serialized as JSON
@@ -15,9 +15,4 @@ producer = KafkaProducer(
 )
 
 if __name__ == '__main__':
-
-    # Infinite loop - runs until you kill the program
-        producer.send('users',generate_users(20))
-        producer.send('events',generate_events(20))
-
-        
+   producer.send('events',generate_events(20))

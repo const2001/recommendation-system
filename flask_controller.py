@@ -60,10 +60,8 @@ def add_event():
     # Get the request data and validate it against the schema
     event_data = request.json
     IsValid, Validation_result = validate_event(event_data)
-    conn = DatabaseConnection().get_connection()
-    events = getEventsFromDatabase(conn)
+
     if IsValid:
-        events.append(event_data)
         addEventToDatabase(event_data)
         return (
             jsonify(
@@ -75,15 +73,17 @@ def add_event():
             ),
             201,
         )
-    conn.close()
+    
 
     return jsonify({"message": "Validation error", "Result": Validation_result}), 400
 
 
 @app.route("/events", methods=["GET"])
 def get_events():
-    
-    return jsonify(getEventsFromDatabase())
+    conn = DatabaseConnection().get_connection()
+    events = getEventsFromDatabase(conn)
+    conn.close()
+    return jsonify(events)
 
 
 def add_coupon():
@@ -91,7 +91,6 @@ def add_coupon():
     coupon_data = request.json
     IsValid, Validation_result = validate_coupon(coupon_data)
     if IsValid:
-        coupons.append(coupon_data)
         addCouponToDatabase(coupon_data)
         return (
             jsonify(
@@ -109,11 +108,18 @@ def add_coupon():
 
 @app.route("/coupons", methods=["GET"])
 def get_coupons():
-    return jsonify(getCouponsFromDatabase())
+    conn = DatabaseConnection().get_connection()
+    coupons = getCouponsFromDatabase(conn)
+    conn.close()
+    return jsonify(coupons)
 
 
 @app.route("/recommendation", methods=["GET"])
 def get_recommendation():
+    conn = DatabaseConnection().get_connection()
+    events = getEventsFromDatabase(conn)
+    coupons = getCouponsFromDatabase(conn)
+    conn.close()
     user_id = request.args.get("user_id")
     if not user_id:
         return "No user ID provided", 400
