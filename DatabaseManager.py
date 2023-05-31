@@ -82,7 +82,7 @@ def addEventToDatabase(event_data,connector = connectPostgressDatabase()):
     )
     conn.commit()
     curr.close()
-    conn.close()
+    
 
 
 def addCouponToDatabase(coupon_data,connector = connectPostgressDatabase()):
