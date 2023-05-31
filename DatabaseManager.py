@@ -57,7 +57,7 @@ def addUserToDatabase(user_data,connector = connectPostgressDatabase()):
         ),
     )
     conn.commit()
-    curr.close()
+    
     
 
 
@@ -81,7 +81,7 @@ def addEventToDatabase(event_data,connector = connectPostgressDatabase()):
         ),
     )
     conn.commit()
-    curr.close()
+   
     
 
 
@@ -97,7 +97,7 @@ def addCouponToDatabase(coupon_data,connector = connectPostgressDatabase()):
 
     
     curr.close()
-    conn.close()
+    
 
 def getUsersFromDatabase(connector = connectPostgressDatabase()):
     sql = """
@@ -126,7 +126,7 @@ def getUsersFromDatabase(connector = connectPostgressDatabase()):
         users.append(user)
 
     curr.close()
-    conn.close()
+    
     return users
 
 def getEventsFromDatabase(connector = connectPostgressDatabase()):
@@ -155,7 +155,7 @@ def getEventsFromDatabase(connector = connectPostgressDatabase()):
         events.append(event)
     
     curr.close()
-    conn.close()    
+     
     return events    
 
 def getCouponsFromDatabase(connector = connectPostgressDatabase()):
@@ -183,7 +183,7 @@ def getCouponsFromDatabase(connector = connectPostgressDatabase()):
 
     
     curr.close()
-    conn.close()
+  
     return coupons
 
 
