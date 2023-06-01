@@ -27,13 +27,13 @@ def add_user():
     # Get the request data and validate it against the schema
     conn = DatabaseConnection().get_connection()
     users = getUsersFromDatabase(conn)
-    conn.close()
+    
     user_data = request.json
     user_data["user_id"] = len(users) + 1
     IsValid, Validation_result = validate_user(user_data)
     if IsValid:
         users.append(user_data)
-        addUserToDatabase(user_data)
+        addUserToDatabase(user_data,conn)
         return (
             jsonify(
                 {
@@ -44,7 +44,7 @@ def add_user():
             ),
             201,
         )
-
+    conn.close()
     return jsonify({"message": "Validation error", "Result": Validation_result}), 400
 
 
