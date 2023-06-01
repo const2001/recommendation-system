@@ -89,9 +89,10 @@ def get_events():
 def add_coupon():
     # Get the request data and validate it against the schema
     coupon_data = request.json
+    conn = DatabaseConnection().get_connection()
     IsValid, Validation_result = validate_coupon(coupon_data)
     if IsValid:
-        addCouponToDatabase(coupon_data)
+        addCouponToDatabase(coupon_data,conn)
         return (
             jsonify(
                 {
@@ -102,7 +103,7 @@ def add_coupon():
             ),
             201,
         )
-
+    conn.close()
     return jsonify({"message": "Validation error", "Result": Validation_result}), 400
 
 
