@@ -1,9 +1,7 @@
 import random
 from datetime import timedelta,datetime
 
-def generate_users(n):
-    users = []
-    for i in range(n):
+def generate_user():
         sports = ["Football", "Basketball", "Tennis", "Baseball", "Hockey"]
         countries = ["USA", "Germany", "Spain", "Italy", "France", "Brazil", "China"]
         genders = ["Male", "Female"]
@@ -23,12 +21,10 @@ def generate_users(n):
                 "currency": currency,
                 "registration_date": registration_date.strftime("%Y-%m-%dT%H:%M:%S")
             }
-        users.append(user)
-    return users
+        return user
 
-def generate_events(n):
-    events = []
-    for i in range(n):
+def generate_event():
+    
         leagues = ["Premier League", "La Liga", "Serie A", "NBA", "NFL", "Copa Libertadores"]
         sports = ["Football", "Basketball", "Soccer", "American Football"]
         countries = ["England", "Spain", "Italy", "USA", "Brazil"]
@@ -50,14 +46,13 @@ def generate_events(n):
             "end_timestamp": end_timestamp.strftime("%Y-%m-%d %H:%M:%S%z"),
             "participants": participants
         }
-        events.append(event)
-    return events
+        
+        return event
 
 
 
-def generate_coupons(n):
-    coupons = []
-    for i in range(n):  
+def generate_coupon():
+    
         coupon_id = random.randint(1, 100)
         selections = []
         timestamp = datetime.now().isoformat()
@@ -79,9 +74,8 @@ def generate_coupons(n):
             "timestamp": timestamp,
             "user_id": user_id
         }
-        coupons.append(coupon)
 
-    return coupons
+        return coupon
 
 
 
