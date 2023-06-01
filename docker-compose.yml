@@ -41,7 +41,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
   kafka3:
     image: confluentinc/cp-kafka:7.3.2
-    container_name: kafka2
+    container_name: kafka3
     ports:
       - "9094:9092"
     depends_on:
@@ -54,22 +54,17 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1    
-  kafka-producer:
-    build:
-      context: ./producer
-    environment:
-      - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
-      - KAFKA_TOPIC=mytopic
-
-  kafka-consumer:
-    build:
-      context: ./consumer
-    environment:
-      - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092
-      - KAFKA_TOPIC=mytopic
+  
   app:
-    build: .
+    build:
+      context: .
     ports:
       - "8000:8000"
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
 
 

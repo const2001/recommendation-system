@@ -8,7 +8,6 @@ from server_address import server_host,server_port
 app = Flask(__name__)
 
 
-
 def get_user_by_id(user_id):
     conn = DatabaseConnection().get_connection()
     users = getUsersFromDatabase(conn)
@@ -67,7 +66,7 @@ def add_event():
             jsonify(
                 {
                     "message": "Event added successfully",
-                    "user": event_data,
+                    "event": event_data,
                     "Result": Validation_result,
                 }
             ),

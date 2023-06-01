@@ -1,19 +1,17 @@
-# this is an official Python runtime, used as the parent image
+# This is an official Python runtime, used as the parent image
 FROM python:3.6.5-slim
 
-# set the working directory in the container to /app
+# Set the working directory in the container to /app
 WORKDIR /app
 
-# add the current directory to the container as /app
+# Add the current directory to the container as /app
 ADD . /app
 
-RUN pip install --upgrade pip
-# execute everyone's favorite pip command, pip install -r
-RUN pip install -r requirements.txt
+# Upgrade pip and install the required dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-
-# unblock port 8000 for the Flask app to run on
+# Unblock port 8000 for the Flask app to run on
 EXPOSE 8000
 
-# execute the Flask app
-CMD ["python", "flask_controller.py"]
+# Execute the Flask app and the Kafka producer and consumer
+CMD ["python", "flask_controller.py", "&", "python", "producer.py", "&", "python", "user_consumer.py", "&", "python", "event_consumer.py", "&", "python", "coupon_consumer.py"]
