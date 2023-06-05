@@ -5,10 +5,10 @@ import json
 
 def connectPostgressDatabase():
     conn = psycopg2.connect(
-        dbname="tuzrhmmv",
-        user="tuzrhmmv",
-        password="Hbcfv140k9-i19CRLWzazb3A5jOxHrci",
-        host="isilo.db.elephantsql.com",
+        dbname="mydb",
+        user="postgres",
+        password="postgres",
+        host="localhost",
         port="5432",
     )
     return conn
@@ -191,9 +191,10 @@ def getCouponsFromDatabase(connector = connectPostgressDatabase()):
 
 
 if __name__ == "__main__":
-    coupons = getCouponsFromDatabase()
-    print(coupons)
-
-#     curr = getDbCursor(conn)
-#     port = getDbHostPort(curr)
-#     print(port)
+    # coupons = getCouponsFromDatabase()
+    # print(coupons)
+    conn = DatabaseConnection().get_connection()
+    curr = getDbCursor(conn)
+    port = getDbHostPort(curr)
+    conn.close()
+    print(port)
