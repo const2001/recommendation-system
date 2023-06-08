@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from validators import validate_user, validate_coupon, validate_event
 from recommendation_gen import recommend_coupons
-from DatabaseManager import addUserToDatabase,addEventToDatabase,addCouponToDatabase,getUsersFromDatabase,getCouponsFromDatabase,getEventsFromDatabase,DatabaseConnection
+from DatabaseManager import addUserToDatabase,addEventToDatabase,addCouponToDatabase,getUsersFromDatabase,getCouponsFromDatabase,getEventsFromDatabase,connectPostgressDatabase
 from server_address import server_host,server_port
 
 
@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 def get_user_by_id(user_id):
-    conn = DatabaseConnection().get_connection()
+    conn = connectPostgressDatabase()
     users = getUsersFromDatabase(conn)
     conn.close()
     for user in users:
@@ -24,7 +24,7 @@ def get_info():
 @app.route("/add_user", methods=["POST"])
 def add_user():
     # Get the request data and validate it against the schema
-    conn = DatabaseConnection().get_connection()
+    conn = connectPostgressDatabase()
     users = getUsersFromDatabase(conn)
     
     user_data = request.json
@@ -49,9 +49,14 @@ def add_user():
 
 @app.route("/users", methods=["GET"])
 def get_users():
-    conn = DatabaseConnection().get_connection()
+    user_id = request.args.get("user_id")
+    conn = connectPostgressDatabase()
     users = getUsersFromDatabase(conn)
     conn.close()
+    if(user_id):
+        user = get_user_by_id(int(user_id))
+        return user
+    
     return jsonify(users)
 
 
@@ -79,7 +84,7 @@ def add_event():
 
 @app.route("/events", methods=["GET"])
 def get_events():
-    conn = DatabaseConnection().get_connection()
+    conn = connectPostgressDatabase()
     events = getEventsFromDatabase(conn)
     conn.close()
     return jsonify(events)
@@ -88,7 +93,7 @@ def get_events():
 def add_coupon():
     # Get the request data and validate it against the schema
     coupon_data = request.json
-    conn = DatabaseConnection().get_connection()
+    conn = connectPostgressDatabase()
     IsValid, Validation_result = validate_coupon(coupon_data)
     if IsValid:
         addCouponToDatabase(coupon_data,conn)
@@ -108,7 +113,7 @@ def add_coupon():
 
 @app.route("/coupons", methods=["GET"])
 def get_coupons():
-    conn = DatabaseConnection().get_connection()
+    conn = connectPostgressDatabase()
     coupons = getCouponsFromDatabase(conn)
     conn.close()
     return jsonify(coupons)
@@ -116,7 +121,7 @@ def get_coupons():
 
 @app.route("/recommendation", methods=["GET"])
 def get_recommendation():
-    conn = DatabaseConnection().get_connection()
+    conn = connectPostgressDatabase()
     events = getEventsFromDatabase(conn)
     coupons = getCouponsFromDatabase(conn)
     conn.close()
