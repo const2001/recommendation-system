@@ -14,4 +14,4 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 EXPOSE 8000
 
 # Execute the Flask app and the Kafka producer and consumer
-CMD ["python", "flask_controller.py", "&", "python", "producer.py", "&", "python", "user_consumer.py", "&", "python", "event_consumer.py", "&", "python", "coupon_consumer.py"]
+CMD ["python", "flask_controller.py", "&","python", "producer.py", "&", "python", "user_consumer.py", "&", "python", "event_consumer.py", "&", "python", "coupon_consumer.py"]

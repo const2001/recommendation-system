@@ -56,6 +56,7 @@ def addUserToDatabase(user_data,connector = connectPostgressDatabase()):
             user_data["registration_date"],
         ),
     )
+    curr.close()
     conn.commit()
     
     
@@ -80,6 +81,7 @@ def addEventToDatabase(event_data,connector = connectPostgressDatabase()):
             event_data["sport"],
         ),
     )
+    curr.close()
     conn.commit()
    
     
@@ -94,9 +96,10 @@ def addCouponToDatabase(coupon_data,connector = connectPostgressDatabase()):
     conn = connector
     curr = getDbCursor(conn)
     curr.execute(sql, (coupon_selections, coupon_data['stake'], coupon_data['timestamp'], coupon_data['user_id']))
-
+    
     
     curr.close()
+    conn.commit()
     
 
 def getUsersFromDatabase(connector = connectPostgressDatabase()):
