@@ -5,7 +5,7 @@ import os
 
 
 def save_coupons_to_DB():
-    #conn = DatabaseConnection().get_connection()
+    conn = DatabaseConnection().get_connection()
     bootstrap_servers = os.environ.get('KAFKA_BOOTSTRAP_SERVERS')
     # Kafka Consumer
     consumerOfCoupons = KafkaConsumer(
@@ -20,13 +20,13 @@ def save_coupons_to_DB():
         for message in consumerOfCoupons:
             coupon_data = message.value
             if coupon_data is not None:
-                 #addCouponToDatabase(coupon_data, conn)
+                 addCouponToDatabase(coupon_data, conn)
                  print(coupon_data)
     
     except KeyboardInterrupt:
         # Close the consumer upon keyboard interrupt
         consumerOfCoupons.close()
-        #conn.close()
+        DatabaseConnection.close_connection()
         print("Consumer stopped.")
 
 if __name__ == '__main__':

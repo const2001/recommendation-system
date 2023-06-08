@@ -4,7 +4,7 @@ from DatabaseManager import addUserToDatabase, getDbCursor, connectPostgressData
 import os
 
 def save_users_to_DB():
-    #conn = DatabaseConnection().get_connection()
+    conn = DatabaseConnection().get_connection()
     bootstrap_servers = os.environ.get('KAFKA_BOOTSTRAP_SERVERS')
     # Kafka Consumer
     consumerOfUsers = KafkaConsumer(
@@ -19,12 +19,13 @@ def save_users_to_DB():
         for message in consumerOfUsers:
             user_data = message.value
             if user_data is not None:
-                # addUserToDatabase(user_data, conn)
+                addUserToDatabase(user_data, conn)
                 print(user_data)
     
     except KeyboardInterrupt:
         # Close the consumer upon keyboard interrupt
         consumerOfUsers.close()
+        DatabaseConnection.close_connection()
        # conn.close()
         print("Consumer stopped.")
 

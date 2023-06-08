@@ -19,12 +19,17 @@ class DatabaseConnection:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            # Initialize the database connection here
-            cls._instance.connection = connectPostgressDatabase()
         return cls._instance
 
+    def __init__(self):
+        if not hasattr(self, "connection"):
+            self.connection = connectPostgressDatabase()
+    
     def get_connection(self):
         return self.connection
+    
+    def close_connection(self):
+        self.connection.close()
 
 
 def getDbCursor(conn):
