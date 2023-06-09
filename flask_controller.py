@@ -59,7 +59,7 @@ def get_users():
     
     return jsonify(users)
 
-
+@app.route("/add_event", methods=["POST"])
 def add_event():
     # Get the request data and validate it against the schema
     event_data = request.json
