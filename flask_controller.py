@@ -55,7 +55,10 @@ def get_users():
     conn.close()
     if(user_id):
         user = get_user_by_id(int(user_id))
-        return user
+        if(user):
+         return jsonify(user)
+        else:
+          return jsonify({"message": "user not found"})  
     
     return jsonify(users)
 
@@ -89,7 +92,7 @@ def get_events():
     conn.close()
     return jsonify(events)
 
-
+@app.route("/add_coupon", methods=["POST"])
 def add_coupon():
     # Get the request data and validate it against the schema
     coupon_data = request.json
