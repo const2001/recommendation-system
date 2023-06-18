@@ -196,5 +196,6 @@ def getDummyCoupons():
 #     addUserToDatabase(user)
 for event in events:
     addEventToDatabase(event)    
-# for coupon in coupons:
-#     addCouponToDatabase(coupon)
+ 
+for coupon in coupons:
+     addCouponToDatabase(coupon)
