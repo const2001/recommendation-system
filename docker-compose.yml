@@ -8,7 +8,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     networks:
-      - mynetwork
+      - recommendation_network
 
   kafka1:
     image: confluentinc/cp-kafka:7.3.2
@@ -26,7 +26,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     networks:
-      - mynetwork
+      - recommendation_network
 
   kafka2:
     image: confluentinc/cp-kafka:7.3.2
@@ -44,7 +44,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     networks:
-      - mynetwork
+      - recommendation_network
 
   kafka3:
     image: confluentinc/cp-kafka:7.3.2
@@ -62,7 +62,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     networks:
-      - mynetwork
+      - recommendation_network
 
   db:
     image: postgres
@@ -76,7 +76,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - mynetwork
+      - recommendation_network
 
   app:
     build:
@@ -91,10 +91,53 @@ services:
       - kafka3
       - db
     networks:
-      - mynetwork
+      - recommendation_network
+  producer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - broker
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+    networks:
+      - recommendation_network
 
+  eventconsumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - broker
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+    networks:
+      - recommendation_network
+
+  userconsumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - broker
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+    networks:
+      - recommendation_network
+
+  couponconsumer:
+    build:
+      context: .
+      dockerfile: Dockerfile.consumer
+    depends_on:
+      - broker
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+    networks:
+      - recommendation_network    
 volumes:
   dbdata:
 
 networks:
-  mynetwork:
+  recommendation_network:
+    driver: bridge
