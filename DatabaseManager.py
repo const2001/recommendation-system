@@ -2,7 +2,6 @@ import psycopg2
 import json
 
 
-
 def connectPostgressDatabase():
     conn = psycopg2.connect(
         dbname="mydb",
