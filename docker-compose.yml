@@ -67,6 +67,7 @@ services:
   db:
     image: postgres
     restart: always
+    container_name: postgres_database
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -78,26 +79,29 @@ services:
     networks:
       - recommendation_network
 
-  app:
+  flask:
     build:
       context: .
+      dockerfile: DockerFile.flask
+    container_name: flask_Rest_Api
     ports:
       - "8000:8000"
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+    depends_on: 
+      - db
+    networks:
+      - recommendation_network
+
+  producer:
+    build:
+      context: .
+      dockerfile: DockerFile.producer
+    container_name: producer
     depends_on:
       - kafka1
       - kafka2
       - kafka3
-      - db
-    networks:
-      - recommendation_network
-  producer:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - broker
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
     networks:
@@ -106,9 +110,13 @@ services:
   eventconsumer:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerFile.eventconsumer
+    container_name: event_consumer
     depends_on:
-      - broker
+      - kafka1
+      - kafka2
+      - kafka3
+      - db
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
     networks:
@@ -117,9 +125,13 @@ services:
   userconsumer:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerFile.userconsumer
+    container_name: user_consumer
     depends_on:
-      - broker
+      - kafka1
+      - kafka2
+      - kafka3
+      - db
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
     networks:
@@ -128,13 +140,18 @@ services:
   couponconsumer:
     build:
       context: .
-      dockerfile: Dockerfile.consumer
+      dockerfile: DockerFile.couponconsumer
+    container_name: coupon_consumer
     depends_on:
-      - broker
+      - kafka1
+      - kafka2
+      - kafka3
+      - db
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092,kafka3:9092
     networks:
-      - recommendation_network    
+      - recommendation_network
+
 volumes:
   dbdata:
 
